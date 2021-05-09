@@ -1,0 +1,6 @@
+.git
+bin/
+.DS_Store
+.gitignore
+target/
+build/
