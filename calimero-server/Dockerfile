@@ -12,7 +12,7 @@ COPY ./${libname} ./${libname}
 RUN cd ${libname} && ./gradlew build
 RUN mkdir /usr/app
 RUN tar -xvf ./${libname}/build/distributions/${libname}-*.tar -C /usr/app/
-
+RUN sed -i 's/DEFAULT_JVM_OPTS=""/DEFAULT_JVM_OPTS="-XX:+UseShenandoahGC"/' /usr/app/${libname}-${libversion}/bin/${libname}
 
 # alpine shell has no support for brace expansion
 RUN rm /usr/app/${libname}-${libversion}/lib/libusb4java-*-win32-*.jar \
