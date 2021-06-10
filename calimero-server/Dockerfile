@@ -4,9 +4,9 @@ ENV libname=calimero-server
 ENV libversion=2.5-M1
 
 # copy sources to container
-COPY ./calimero-core ./calimero-core
-COPY ./serial-native ./serial-native
-COPY ./${libname} ./${libname}
+COPY ./repos/calimero-core ./calimero-core
+COPY ./repos/serial-native ./serial-native
+COPY ./repos/${libname} ./${libname}
 
 
 RUN cd ${libname} && ./gradlew build
