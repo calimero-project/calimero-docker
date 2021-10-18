@@ -1,12 +1,14 @@
 FROM bellsoft/liberica-openjdk-alpine-musl:latest AS BUILDER
 
 ENV libname=calimero-tools
-ENV libversion=2.5-M1
+ENV libversion=2.5-rc1
 
 # copy sources to container
 COPY ./repos/calimero-core ./calimero-core
 COPY ./repos/serial-native ./serial-native
 COPY ./repos/${libname} ./${libname}
+# only needed for compilation (because of build.gradle dependency)
+COPY ./repos/calimero-rxtx ./calimero-rxtx
 
 
 RUN cd ${libname} && ./gradlew build
@@ -65,4 +67,4 @@ RUN apk --no-cache add libusb
 RUN ln -s /sys/bus /dev/bus
 
 WORKDIR /usr/app
-ENTRYPOINT ["calimero-tools-2.5-M1/bin/calimero-tools"]
+ENTRYPOINT ["calimero-tools-2.5-rc1/bin/calimero-tools"]

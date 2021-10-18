@@ -1,12 +1,15 @@
 FROM bellsoft/liberica-openjdk-alpine-musl:latest AS BUILDER
 
 ENV libname=calimero-server
-ENV libversion=2.5-M1
+ENV libversion=2.5-rc1
 
 # copy sources to container
 COPY ./repos/calimero-core ./calimero-core
+COPY ./repos/calimero-device ./calimero-device
 COPY ./repos/serial-native ./serial-native
 COPY ./repos/${libname} ./${libname}
+# only needed for compilation (because of build.gradle dependency)
+COPY ./repos/calimero-rxtx ./calimero-rxtx
 
 
 RUN cd ${libname} && ./gradlew build
@@ -65,4 +68,4 @@ RUN ln -s /sys/bus /dev/bus
 EXPOSE 3671/udp 3671/tcp
 
 WORKDIR /usr/app
-ENTRYPOINT ["calimero-server-2.5-M1/bin/calimero-server"]
+ENTRYPOINT ["calimero-server-2.5-rc1/bin/calimero-server"]
