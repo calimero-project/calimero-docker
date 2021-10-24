@@ -6,5 +6,5 @@ rsync -av --exclude=*/.git* --exclude=.gradle/ --exclude=.idea/ --exclude=bin/ -
 #custom-liberica/build-jdk.sh $1
 (cd custom-jdk && ./build-custom-jdk.sh $1)
 
-docker build -f calimero-tools/Dockerfile -t calimeroproject/knxtools -t calimeroproject/knxtools:2.5-rc1 . $1
-docker build -f calimero-server/Dockerfile -t calimeroproject/knxserver -t calimeroproject/knxserver:2.5-rc1 . $1
+docker build -f calimero-tools/Dockerfile -t calimeroproject/knxtools -t calimeroproject/knxtools:2.5-rc2 . $1
+docker build -f calimero-server/Dockerfile -t calimeroproject/knxserver -t calimeroproject/knxserver:2.5-rc2 . $1
