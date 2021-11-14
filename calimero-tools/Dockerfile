@@ -1,7 +1,7 @@
 FROM bellsoft/liberica-openjdk-alpine-musl:latest AS BUILDER
 
 ENV libname=calimero-tools
-ENV libversion=2.5-rc2
+ENV libversion=2.5
 
 # copy sources to container
 COPY ./repos/calimero-core ./calimero-core
@@ -67,4 +67,4 @@ RUN apk --no-cache add libusb
 RUN ln -s /sys/bus /dev/bus
 
 WORKDIR /usr/app
-ENTRYPOINT ["calimero-tools-2.5-rc2/bin/calimero-tools"]
+ENTRYPOINT ["calimero-tools-2.5/bin/calimero-tools"]

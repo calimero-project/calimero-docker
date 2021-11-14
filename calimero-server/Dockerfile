@@ -1,7 +1,7 @@
 FROM bellsoft/liberica-openjdk-alpine-musl:latest AS BUILDER
 
 ENV libname=calimero-server
-ENV libversion=2.5-rc2
+ENV libversion=2.5
 
 # copy sources to container
 COPY ./repos/calimero-core ./calimero-core
@@ -68,4 +68,4 @@ RUN ln -s /sys/bus /dev/bus
 EXPOSE 3671/udp 3671/tcp
 
 WORKDIR /usr/app
-ENTRYPOINT ["calimero-server-2.5-rc2/bin/calimero-server"]
+ENTRYPOINT ["calimero-server-2.5/bin/calimero-server"]
