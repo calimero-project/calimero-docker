@@ -7,15 +7,15 @@ ENV libversion=2.6-SNAPSHOT
 COPY ./repos/calimero-core ./calimero-core
 COPY ./repos/calimero-device ./calimero-device
 COPY ./repos/serial-native ./serial-native
+COPY ./repos/calimero-usb ./calimero-usb
 COPY ./repos/${libname} ./${libname}
-# only needed for compilation (because of build.gradle dependency)
-COPY ./repos/calimero-rxtx ./calimero-rxtx
 
 
 RUN cd ${libname} && ./gradlew build
 RUN mkdir /usr/app
 RUN tar -xvf ./${libname}/build/distributions/${libname}-*.tar -C /usr/app/
-RUN sed -i 's/DEFAULT_JVM_OPTS=""/DEFAULT_JVM_OPTS="-XX:+UseShenandoahGC"/' /usr/app/${libname}-${libversion}/bin/${libname}
+RUN sed -i 's/DEFAULT_JVM_OPTS=""/DEFAULT_JVM_OPTS="-XX:+UseShenandoahGC --add-reads io.calimero.core=io.calimero.server --add-reads io.calimero.usb=ALL-UNNAMED"/' \
+            /usr/app/${libname}-${libversion}/bin/${libname}
 
 # alpine shell has no support for brace expansion
 RUN rm /usr/app/${libname}-${libversion}/lib/libusb4java-*-win32-*.jar \
@@ -37,7 +37,7 @@ RUN jar -uvf /usr/app/${libname}-${libversion}/lib/libusb4java-${usbver}-linux-x
 
 # build serialcom for musl
 RUN apk add linux-headers
-RUN cd serial-native && ./gradlew --no-watch-fs build
+RUN cd serial-native && ./gradlew build
 
 RUN rm /usr/app/${libname}-${libversion}/lib/nrjavaserial-*.jar \
        /usr/app/${libname}-${libversion}/lib/calimero-rxtx-*.jar
