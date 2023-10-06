@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=2.6-SNAPSHOT
+version=3.0-SNAPSHOT
 
 rsync -av --exclude=*/.git* --exclude=.gradle/ --exclude=.idea/ --exclude=bin/ --exclude=test/ --exclude=target/ --exclude=build/ --exclude=out/ \
     ../calimero-core ../calimero-device ../calimero-server ../calimero-rxtx ../calimero-testnetwork ./repos/

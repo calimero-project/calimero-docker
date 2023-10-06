@@ -3,6 +3,12 @@
 Dockerfiles for [Calimero tools](https://github.com/calimero-project/calimero-tools) and [Calimero server](https://github.com/calimero-project/calimero-server). Built Docker images are available on [Docker Hub](https://hub.docker.com/u/calimeroproject).
 
 ### Building images
+Select architecture:
+
+* master branch: amd64
+* platform/aarch64: Aarch64
+
+Invoke:
 
 	./build-images.sh
 

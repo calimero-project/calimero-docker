@@ -1,7 +1,7 @@
-FROM bellsoft/liberica-openjdk-alpine-musl:latest AS BUILDER
+FROM bellsoft/liberica-openjdk-alpine-musl:17 AS BUILDER
 
 ENV libname=calimero-server
-ENV libversion=2.6-SNAPSHOT
+ARG libversion
 
 # copy sources to container
 COPY ./repos/calimero-core ./calimero-core
@@ -11,23 +11,22 @@ COPY ./repos/calimero-usb ./calimero-usb
 COPY ./repos/${libname} ./${libname}
 
 
-RUN cd ${libname} && ./gradlew build
-RUN mkdir /usr/app
-RUN tar -xvf ./${libname}/build/distributions/${libname}-*.tar -C /usr/app/
-RUN sed -i 's/DEFAULT_JVM_OPTS=""/DEFAULT_JVM_OPTS="-XX:+UseShenandoahGC --add-reads io.calimero.core=io.calimero.server --add-reads io.calimero.usb=ALL-UNNAMED"/' \
-            /usr/app/${libname}-${libversion}/bin/${libname}
+RUN cd ${libname} && ./gradlew build && \
+    mkdir /usr/app && \
+    tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/ && \
+    sed -i "s/DEFAULT_JVM_OPTS='/DEFAULT_JVM_OPTS='\"-XX:+UseShenandoahGC\" /" /usr/app/${libname}-${libversion}/bin/${libname}
 
 # alpine shell has no support for brace expansion
-RUN rm /usr/app/${libname}-${libversion}/lib/libusb4java-*-win32-*.jar \
-       /usr/app/${libname}-${libversion}/lib/libusb4java-*-aarch64.jar \
-       /usr/app/${libname}-${libversion}/lib/libusb4java-*-darwin-*.jar \
-       /usr/app/${libname}-${libversion}/lib/libusb4java-*-arm.jar
-RUN rm /usr/app/${libname}-${libversion}/lib/libusb4java-*-x86.jar
+RUN cd /usr/app/${libname}-${libversion}/lib && \
+    rm -f libusb4java-*-win32-*.jar libusb4java-*-aarch64.jar libusb4java-*-darwin-*.jar libusb4java-*-arm.jar libusb4java-*-x86.jar \
+       calimero-rxtx-*.jar nrjavaserial-*.jar \
+       commons-net-*.jar \
+       slf4j-*.jar
 
 # build libusb4java for musl
-RUN apk add git build-base cmake libusb-dev
-RUN git clone https://github.com/usb4java/libusb4java.git
-RUN cd libusb4java && mkdir build && cd build && cmake .. && make
+RUN apk add git build-base cmake libusb-dev && \
+    git clone https://github.com/usb4java/libusb4java.git && \
+    cd libusb4java && mkdir build && cd build && cmake .. && make
 RUN mkdir --parents libusb4java/build/src/org/usb4java/linux-x86-64; mv libusb4java/build/src/libusb4java.so libusb4java/build/src/org/usb4java/linux-x86-64
 
 ENV usbver=1.3.0
@@ -36,12 +35,8 @@ RUN jar -uvf /usr/app/${libname}-${libversion}/lib/libusb4java-${usbver}-linux-x
 
 
 # build serialcom for musl
-RUN apk add linux-headers
-RUN cd serial-native && ./gradlew build
-
-RUN rm /usr/app/${libname}-${libversion}/lib/nrjavaserial-*.jar \
-       /usr/app/${libname}-${libversion}/lib/calimero-rxtx-*.jar
-
+RUN apk add linux-headers && \
+    cd serial-native && ./gradlew build
 
 # second stage
 
@@ -62,10 +57,10 @@ LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 COPY --from=BUILDER /usr/app /usr/app/
 COPY --from=BUILDER /serial-native/build/lib/main/release/stripped/libserialcom.so /usr/lib/
 
-RUN apk --no-cache add libusb
-RUN ln -s /sys/bus /dev/bus
+RUN apk --no-cache add libusb && \
+    ln -s /sys/bus /dev/bus
 
 EXPOSE 3671/udp 3671/tcp
 
 WORKDIR /usr/app
-ENTRYPOINT ["calimero-server-2.6-SNAPSHOT/bin/calimero-server"]
+ENTRYPOINT ["calimero-server-3.0-SNAPSHOT/bin/calimero-server"]

@@ -1,7 +1,7 @@
 ARG libname=calimero-testnetwork
 ARG libversion
 
-FROM bellsoft/liberica-openjdk-alpine-musl:latest AS BUILDER
+FROM bellsoft/liberica-openjdk-alpine-musl:17 AS BUILDER
 ARG libname
 ARG libversion
 
@@ -14,17 +14,14 @@ COPY ./repos/${libname} ./${libname}
 COPY ./repos/calimero-rxtx ./calimero-rxtx
 
 
-RUN cd ${libname} && ./gradlew build
-RUN mkdir /usr/app
-RUN tar -xvf ./${libname}/build/distributions/${libname}-*.tar -C /usr/app/
-RUN sed -i 's/DEFAULT_JVM_OPTS=""/DEFAULT_JVM_OPTS="-XX:+UseShenandoahGC"/' /usr/app/${libname}-${libversion}/bin/${libname}
+RUN cd ${libname} && ./gradlew build && \
+    mkdir /usr/app && \
+    tar -xvf ./${libname}/build/distributions/${libname}-*.tar -C /usr/app/ && \
+    sed -i 's/DEFAULT_JVM_OPTS=""/DEFAULT_JVM_OPTS="-XX:+UseShenandoahGC"/' /usr/app/${libname}-${libversion}/bin/${libname}
 
 # alpine shell has no support for brace expansion
-RUN rm /usr/app/${libname}-${libversion}/lib/libusb4java-*-win32-*.jar \
-       /usr/app/${libname}-${libversion}/lib/libusb4java-*-aarch64.jar \
-       /usr/app/${libname}-${libversion}/lib/libusb4java-*-darwin-*.jar \
-       /usr/app/${libname}-${libversion}/lib/libusb4java-*-arm.jar
-RUN rm /usr/app/${libname}-${libversion}/lib/libusb4java-*-x86.jar
+RUN cd /usr/app/${libname}-${libversion}/lib && \
+    rm libusb4java-*-win32-*.jar libusb4java-*-aarch64.jar libusb4java-*-darwin-*.jar libusb4java-*-arm.jar libusb4java-*-x86.jar
 
 
 
