@@ -1,6 +1,6 @@
 ARG bootJdk
 
-FROM openjdk$bootJdk-alpine-musl
+FROM calimeroproject/openjdk-cl-alpine:$bootJdk
 
 ARG bootJdk
 ARG targetJdk

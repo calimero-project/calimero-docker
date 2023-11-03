@@ -40,7 +40,7 @@ RUN  apk --no-cache add binutils \
                     --no-header-files                       \
                     --no-man-pages --strip-debug            \
                     --module-path ${TMP_ROOT}/jmods    \
- #                   --vm=$VM                             \
+#                   --vm=$VM                             \
                     --release-info ${TMP_ROOT}/release \
                     --output "${JDK_ROOT}"             \
                 ;;                         \

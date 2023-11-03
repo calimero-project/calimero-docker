@@ -1,4 +1,4 @@
-FROM calimeroproject/openjdk-cl-alpine:17 as gradle-cache
+FROM calimeroproject/openjdk-cl-alpine:17 AS gradle-cache
 COPY ./repos/calimero-core/build.gradle ./repos/calimero-core/gradlew /
 COPY ./repos/calimero-core/gradle/ gradle
 RUN ./gradlew clean --stacktrace
@@ -14,7 +14,8 @@ ARG libversion
 # copy sources to container
 COPY ./repos/calimero-core ./calimero-core
 COPY ./repos/calimero-device ./calimero-device
-COPY ./repos/serial-native ./serial-native
+# skip serial-native here, Gradle build failure (Tool chain 'gcc' (GNU GCC): Don't know how to build for host operating system 'Linux' architecture 'arm')
+#COPY ./repos/serial-native ./serial-native
 COPY ./repos/calimero-usb ./calimero-usb
 COPY ./repos/${libname} ./${libname}
 
@@ -32,22 +33,18 @@ RUN cd /usr/app/${libname}-${libversion}/lib && \
 
 # build libusb4java for musl
 ENV usbver=1.3.0
-RUN apk add git build-base cmake libusb-dev && \
-    git clone https://github.com/usb4java/libusb4java.git && \
-    cd libusb4java && mkdir build && cd build && cmake .. && make && \
-    mkdir --parents src/org/usb4java/linux-arm; mv src/libusb4java.so src/org/usb4java/linux-arm && \
-    jar -uvf /usr/app/${libname}-${libversion}/lib/libusb4java-${usbver}-linux-arm.jar -C src org/usb4java/linux-arm/libusb4java.so
+RUN apk add git build-base cmake libusb-dev \
+  && git clone https://github.com/usb4java/libusb4java.git \
+  && cd libusb4java && mkdir build && cd build && cmake .. && make \
+  && mkdir --parents src/org/usb4java/linux-arm; mv src/libusb4java.so src/org/usb4java/linux-arm \
+  && jar -uvf /usr/app/${libname}-${libversion}/lib/libusb4java-${usbver}-linux-arm.jar -C src org/usb4java/linux-arm/libusb4java.so
 
 
-# build serialcom
-ENV MVN_VERSION=3.9.4
-ENV M2_HOME=/opt/apache-maven-$MVN_VERSION
-ENV PATH=$M2_HOME/bin:$PATH
+# build serial-native/serialcom for musl
+COPY ./repos/serial-native ./serial-native
+RUN apk add --no-cache linux-headers maven \
+  && cd /serial-native && mvn nar:nar-compile
 
-RUN apk add wget linux-headers g++ && \
-    wget -P /tmp/ https://archive.apache.org/dist/maven/maven-3/$MVN_VERSION/binaries/apache-maven-$MVN_VERSION-bin.tar.gz && \
-    cd /opt && tar -xzvf /tmp/apache-maven-$MVN_VERSION-bin.tar.gz && \
-    cd /serial-native && mvn nar:nar-compile
 
 
 
