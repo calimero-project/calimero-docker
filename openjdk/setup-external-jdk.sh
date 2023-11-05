@@ -14,4 +14,3 @@ fi
 echo "Mounting volume with JDK from $(pwd)/jdk${targetJdk}u"
 
 docker run -it -v $(pwd)/jdk${targetJdk}u:/jdk openjdk$targetJdk-builder
-

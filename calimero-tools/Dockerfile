@@ -10,6 +10,7 @@ COPY --from=gradle-cache /root/.gradle /root/.gradle
 
 ENV libname=calimero-tools
 ARG libversion
+ARG arch
 
 # copy sources to container
 COPY ./repos/calimero-core ./calimero-core
@@ -35,8 +36,8 @@ ENV usbver=1.3.0
 RUN apk add git build-base cmake libusb-dev \
   && git clone https://github.com/usb4java/libusb4java.git \
   && cd libusb4java && mkdir build && cd build && cmake .. && make \
-  && mkdir --parents src/org/usb4java/linux-x86-64; mv src/libusb4java.so src/org/usb4java/linux-x86-64 \
-  && jar -uvf /usr/app/${libname}-${libversion}/lib/libusb4java-${usbver}-linux-x86-64.jar -C src org/usb4java/linux-x86-64/libusb4java.so
+  && mkdir --parents src/org/usb4java/linux-$arch; mv src/libusb4java.so src/org/usb4java/linux-$arch \
+  && jar -uvf /usr/app/${libname}-${libversion}/lib/libusb4java-${usbver}-linux-$arch.jar -C src org/usb4java/linux-$arch/libusb4java.so
 
 
 
