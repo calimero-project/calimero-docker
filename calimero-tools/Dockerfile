@@ -18,11 +18,12 @@ COPY ./repos/serial-native ./serial-native
 COPY ./repos/calimero-usb ./calimero-usb
 COPY ./repos/${libname} ./${libname}
 
-RUN RUN apk add tar linux-headers \
+RUN apk add tar linux-headers build-base \
   && cd ${libname} \
   && ./gradlew build -x javadoc \
   && mkdir /usr/app \
-  && tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/ 
+  && tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/ \
+  && cd ../serial-native && ./gradlew build
 
 # alpine shell has no support for brace expansion
 RUN cd /usr/app/${libname}-${libversion}/lib && \
