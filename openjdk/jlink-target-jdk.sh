@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$#" -ne 3 ]; then
+if [ "$#" -lt 3 ]; then
     echo "Script expects parameters <JDK version> <variant={client,server,custom}> <modules>"
     exit 1
 fi
