@@ -39,6 +39,7 @@ echo "recreating tags for calimeroproject/$image..."
 docker manifest rm calimeroproject/$image:$version
 docker manifest create \
     calimeroproject/$image:$version \
+    --amend calimeroproject/$image:$version-amd64 \
     --amend calimeroproject/$image:$version-armv7 \
     --amend calimeroproject/$image:$version-aarch64
 
@@ -49,6 +50,7 @@ docker manifest push calimeroproject/$image:$version
 docker manifest rm calimeroproject/$image:latest
 docker manifest create \
     calimeroproject/$image:latest \
+    --amend calimeroproject/$image:latest-amd64 \
     --amend calimeroproject/$image:latest-armv7 \
     --amend calimeroproject/$image:latest-aarch64
 

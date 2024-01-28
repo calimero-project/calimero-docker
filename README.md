@@ -6,7 +6,7 @@ Dockerfiles for [Calimero tools](https://github.com/calimero-project/calimero-to
 Select architecture:
 
 * master branch: amd64
-* platform/aarch64: Aarch64
+* platform/aarch64: AArch64
 * platform/armv7: ARMv7
 
 Invoke:
