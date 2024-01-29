@@ -12,13 +12,13 @@ rsync -av --exclude=.DS_Store --exclude=*/.git* --exclude=.gradle/ --exclude=.se
 cmd="buildx build --platform=linux/$arch"
 
 echo
-echo "Building knxtools..."
+echo "Building knxtools $version for platform $arch..."
 docker $cmd . -f calimero-tools/Dockerfile --build-arg libversion=$version --build-arg arch=$arch_alt \
        -t calimeroproject/knxtools -t calimeroproject/knxtools:$version \
        -t calimeroproject/knxtools:latest-$arch -t calimeroproject/knxtools:$version-$arch $1
 echo
 echo
-echo "Building knxserver..."
+echo "Building knxserver $version for platform $arch..."
 docker $cmd . -f calimero-server/Dockerfile --build-arg libversion=$version --build-arg arch=$arch_alt \
        -t calimeroproject/knxserver -t calimeroproject/knxserver:$version \
        -t calimeroproject/knxserver:latest-$arch -t calimeroproject/knxserver:$version-$arch $1
