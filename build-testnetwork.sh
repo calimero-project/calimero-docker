@@ -5,7 +5,7 @@ arch=amd64
 arch_alt=x86_64
 
 rsync -av --exclude=*/.git* --exclude=.gradle/ --exclude=.settings/ --exclude=.idea/ --exclude=bin/ --exclude=test/ --exclude=target/ --exclude=build/ --exclude=out/ \
-    ../calimero-core ../calimero-device ../calimero-server ../calimero-rxtx ../calimero-testnetwork ./repos/
+    ../calimero-core ../calimero-device ../calimero-server ../calimero-testnetwork ./repos/
 
 
 cmd="buildx build --platform=linux/$arch"
@@ -19,4 +19,4 @@ docker $cmd . -f calimero-testnetwork/Dockerfile --build-arg libversion=$version
 echo
 echo
 echo "Verify testnetwork image..."
-docker run -it --rm calimeroproject/knxtestnetwork:$version-$arch
+docker run -it --rm calimeroproject/knxtestnetwork:$version-$arch --version
