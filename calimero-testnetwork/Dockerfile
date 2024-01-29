@@ -24,19 +24,17 @@ COPY ./repos/${libname} ./${libname}
 
 RUN cd ${libname} \ 
   && ./gradlew build -x javadoc \
-  && mkdir /usr/app
-RUN cd ${libname} && tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/
+  && mkdir /usr/app \
+  && tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/ \
+  && ln -s $libname-$libversion\/bin/$libname /usr/app/testnetwork
 
 
 # second stage
 
-#FROM bellsoft/liberica-openjdk-alpine-musl:latest
 FROM calimeroproject/openjdk-base-alpine:21
 
 ARG libname
 ARG libversion
-ENV libname ${libname}
-ENV libversion ${libversion}
 
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
@@ -48,4 +46,4 @@ COPY $libname\/keyfile /usr/app/
 EXPOSE 3671/udp 3671/tcp
 
 WORKDIR /usr/app
-ENTRYPOINT ["sh", "-c", "$libname-$libversion\/bin/$libname server-config.xml"]
+ENTRYPOINT ["./testnetwork"]
