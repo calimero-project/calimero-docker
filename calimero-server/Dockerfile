@@ -19,9 +19,10 @@ COPY ./repos/calimero-device ./calimero-device
 COPY ./repos/calimero-usb ./calimero-usb
 COPY ./repos/${libname} ./${libname}
 
-RUN cd ${libname} && ./gradlew build -x javadoc && \
+RUN  apk add git tar \
+  && cd ${libname} \
+  && ./gradlew build -x javadoc && \
     mkdir /usr/app && \
-    apk add tar && \
     tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/
     
 # alpine shell has no support for brace expansion
@@ -33,7 +34,7 @@ RUN cd /usr/app/${libname}-${libversion}/lib && \
 
 # build libusb4java for musl
 ENV usbver=1.3.0
-RUN apk add git build-base cmake libusb-dev \
+RUN apk add build-base cmake libusb-dev \
   && git clone https://github.com/usb4java/libusb4java.git \
   && cd libusb4java && mkdir build && cd build && cmake .. && make \
   && mkdir --parents src/org/usb4java/linux-arm; mv src/libusb4java.so src/org/usb4java/linux-arm \
