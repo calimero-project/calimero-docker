@@ -51,7 +51,7 @@ RUN apk add --no-cache linux-headers maven \
 
 # second stage
 
-FROM calimeroproject/openjdk-base-alpine:17
+FROM calimeroproject/openjdk-base-alpine:23-armv7
 
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 

@@ -49,7 +49,7 @@ RUN apk add linux-headers maven \
 
 # second stage
 
-FROM calimeroproject/openjdk-xml-alpine:17
+FROM calimeroproject/openjdk-xml-alpine:23-armv7
 
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
