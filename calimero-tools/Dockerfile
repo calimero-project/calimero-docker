@@ -46,7 +46,7 @@ RUN apk add build-base cmake libusb-dev \
 # second stage
 
 #FROM bellsoft/liberica-openjdk-alpine-musl:latest
-FROM calimeroproject/openjdk-xml-alpine:17
+FROM calimeroproject/openjdk-xml-alpine:23-amd64
 
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
