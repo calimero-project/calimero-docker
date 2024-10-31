@@ -4,7 +4,7 @@ version=3.0-SNAPSHOT
 arch=arm64
 arch_alt=aarch64
 
-rsync -av --exclude=.DS_Store --exclude=*/.git* --exclude=.gradle/ --exclude=.settings/ --exclude=.idea/ --exclude=bin/ --exclude=test/ --exclude=target/ --exclude=build/ --exclude=out/ \
+rsync -av --exclude=.DS_Store --exclude=.gradle/ --exclude=.settings/ --exclude=.idea/ --exclude=bin/ --exclude=test/ --exclude=target/ --exclude=build/ --exclude=out/ \
     ../calimero-core ../calimero-tools ../serial-native ../calimero-device ../calimero-server ../calimero-usb ./repos/
 
 
