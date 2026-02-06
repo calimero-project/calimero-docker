@@ -52,7 +52,7 @@ LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
 # copy only the artifacts we need from the first stage and discard the rest
 COPY --from=BUILDER /usr/app /usr/app/
-COPY --from=BUILDER /serial-native/build/lib/main/release/stripped/libserialcom.so /usr/lib/
+COPY --from=BUILDER /serial-native/native-lib/build/lib/main/release/stripped/libserialcom.so /usr/lib/
 
 RUN apk add --no-cache libusb
 #  && ln -s /sys/bus /dev/bus
