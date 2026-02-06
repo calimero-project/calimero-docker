@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=3.0-SNAPSHOT
+version=3.0-M1
 arch=amd64
 arch_alt=x86-64
 
