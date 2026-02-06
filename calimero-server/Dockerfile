@@ -53,7 +53,7 @@ RUN apk add --no-cache zip \
 
 # second stage
 
-FROM calimeroproject/openjdk-base-alpine:23-aarch64
+FROM calimeroproject/openjdk-base-alpine:25-aarch64
 
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
