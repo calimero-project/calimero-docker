@@ -26,7 +26,7 @@ RUN  apk add git tar \
 
 # alpine shell has no support for brace expansion
 RUN cd /usr/app/${libname}-${libversion}/lib && \
-    rm -f libusb4java-*-aarch64.jar libusb4java-*-x86*.jar \
+    rm -f libusb4java-*-aarch64*.jar libusb4java-*-x86*.jar \
        calimero-rxtx-*.jar nrjavaserial-*.jar \
        commons-net-*.jar \
        slf4j-*.jar
