@@ -28,10 +28,10 @@ RUN apk add --no-cache git tar \
 
 # alpine shell has no support for brace expansion
 RUN cd /usr/app/${libname}-${libversion}/lib && \
-    rm libusb4java-*-x86*.jar libusb4java-*-arm.jar \
+    rm libusb4java-*-x86*.jar libusb4java-*-arm.jar libusb4java-*-win-*.jar libusb4java-*-darwin-*.jar \
        calimero-rxtx-*.jar nrjavaserial-*.jar \
        commons-net-*.jar \
-       slf4j-*.jar
+       slf4j-*.jar || true
 
 # build libusb4java for musl
 ENV usbver=1.3.0
