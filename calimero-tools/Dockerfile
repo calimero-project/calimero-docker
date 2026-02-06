@@ -51,14 +51,16 @@ RUN apk add linux-headers maven \
 
 FROM calimeroproject/openjdk-xml-alpine:23-armv7
 
+ARG libversion
+
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
 # copy only the artifacts we need from the first stage and discard the rest
-COPY --from=BUILDER /usr/app /usr/app/
-COPY --from=BUILDER /serial-native/target/nar/serial-native-3.0-SNAPSHOT-arm-Linux-gpp-jni/lib/arm-Linux-gpp/jni/libserialcom.so /usr/lib/
+COPY --from=BUILDER /usr/app/calimero-tools-${libversion} /usr/app/calimero-tools
+COPY --from=BUILDER /serial-native/target/nar/serial-native-${libversion}-arm-Linux-gpp-jni/lib/arm-Linux-gpp/jni/libserialcom.so /usr/lib/
 
 RUN apk add --no-cache libusb libgcc
 #  && ln -s /sys/bus /dev/bus
 
 WORKDIR /usr/app
-ENTRYPOINT ["calimero-tools-3.0-SNAPSHOT/bin/calimero-tools"]
+ENTRYPOINT ["calimero-tools/bin/calimero-tools"]

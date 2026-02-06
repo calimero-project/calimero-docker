@@ -53,11 +53,13 @@ RUN apk add --no-cache linux-headers maven \
 
 FROM calimeroproject/openjdk-base-alpine:23-armv7
 
+ARG libversion
+
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
 # copy only the artifacts we need from the first stage and discard the rest
-COPY --from=BUILDER /usr/app /usr/app/
-COPY --from=BUILDER /serial-native/target/nar/serial-native-3.0-SNAPSHOT-arm-Linux-gpp-jni/lib/arm-Linux-gpp/jni/libserialcom.so /usr/lib/
+COPY --from=BUILDER /usr/app/calimero-server-${libversion} /usr/app/calimero-server
+COPY --from=BUILDER /serial-native/target/nar/serial-native-${libversion}-arm-Linux-gpp-jni/lib/arm-Linux-gpp/jni/libserialcom.so /usr/lib/
 
 RUN apk add --no-cache libusb libgcc
 #  && ln -s /sys/bus /dev/bus
@@ -65,4 +67,4 @@ RUN apk add --no-cache libusb libgcc
 EXPOSE 3671/udp 3671/tcp
 
 WORKDIR /usr/app
-ENTRYPOINT ["calimero-server-3.0-SNAPSHOT/bin/calimero-server"]
+ENTRYPOINT ["calimero-server/bin/calimero-server"]
