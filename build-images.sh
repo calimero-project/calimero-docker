@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=3.0-SNAPSHOT
+version=3.0-M1
 arch=armv7
 
 rsync -av --exclude=.gradle/ --exclude=.idea/ --exclude=bin/ --exclude=test/ --exclude=target/ --exclude=build/ --exclude=out/ \
