@@ -20,7 +20,7 @@ COPY ./repos/calimero-usb ./calimero-usb
 COPY ./repos/${libname} ./${libname}
 
 RUN apk add --no-cache git tar \
-  && cd ${libname} \ 
+  && cd ${libname} \
   && ./gradlew build -x javadoc \
   && mkdir /usr/app \
   && tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/
