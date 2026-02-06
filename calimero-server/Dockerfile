@@ -15,8 +15,7 @@ ARG arch
 # copy sources to container
 COPY ./repos/calimero-core ./calimero-core
 COPY ./repos/calimero-device ./calimero-device
-# skip serial-native here, Gradle build failure (Tool chain 'gcc' (GNU GCC): Don't know how to build for host operating system 'Linux' architecture 'aarch64')
-#COPY ./repos/serial-native ./serial-native
+COPY ./repos/serial-native ./serial-native
 COPY ./repos/calimero-usb ./calimero-usb
 COPY ./repos/${libname} ./${libname}
 
@@ -43,8 +42,7 @@ RUN apk add --no-cache build-base cmake libusb-dev \
   && jar -uvf /usr/app/${libname}-${libversion}/lib/libusb4java-${usbver}-linux-$arch.jar -C src org/usb4java/linux-$arch/libusb4java.so
 
 
-# build serial-native/serialcom for musl
-COPY ./repos/serial-native ./serial-native
+# build serial-native/native-lib/serialcom for musl
 RUN apk add --no-cache linux-headers maven \
   && cd /serial-native && mvn nar:nar-compile
 
