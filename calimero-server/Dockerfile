@@ -1,11 +1,11 @@
-FROM calimeroproject/openjdk-cl-alpine:17 AS gradle-cache
+FROM calimeroproject/openjdk-cl-alpine:21 AS gradle-cache
 COPY ./repos/calimero-core/build.gradle.kts ./repos/calimero-core/gradlew /
 COPY ./repos/calimero-core/gradle/ gradle
 RUN ./gradlew clean --stacktrace
 
 
 
-FROM calimeroproject/openjdk-cl-alpine:17 AS BUILDER
+FROM calimeroproject/openjdk-cl-alpine:21 AS BUILDER
 COPY --from=gradle-cache /root/.gradle /root/.gradle
 
 ENV libname=calimero-server
