@@ -5,13 +5,13 @@
 # new image for each architecture
 #
 
-if [ "$#" -ne 1 ]; then
-    echo "Script expects parameter <knxtools> or <knxserver>"
+if [ "$#" -ne 2 ]; then
+    echo "Script expects parameters Calimero image {tools|server} and version"
     exit 1
 fi
 
-image=$1
-version=3.0-SNAPSHOT
+image=knx$1
+version=$2
 
 echo "recreating tags for calimeroproject/$image:{latest,$version}..."
 
