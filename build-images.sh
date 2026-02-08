@@ -5,7 +5,6 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-version=3.0-M1
 arch=$1
 
 
@@ -28,6 +27,8 @@ fi
 rsync -av --exclude=.DS_Store --exclude=.gradle/ --exclude=.settings/ --exclude=.idea/ --exclude=bin/ --exclude=test/ --exclude=target/ --exclude=build/ --exclude=out/ \
     ../calimero-core ../calimero-tools ../serial-native ../calimero-device ../calimero-server ../calimero-usb ./repos/
 
+# get the Calimero version we will build from the Gradle build setup
+version=$(cd repos/calimero-core && ./gradlew properties -q | sed -n 's/^version: //p')
 
 cmd="buildx build --platform=linux/$arch"
 
