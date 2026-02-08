@@ -32,7 +32,7 @@ fi
 
 image=openjdk${variant_id}${modules_id}-alpine
 
-echo "recreating tags for calimeroproject/$image..."
+echo "recreating tags for calimeroproject/$image:{latest,$version}..."
 
 # we need to update tags with name "latest" and <version> (e.g., 17, 21)
 

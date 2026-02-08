@@ -13,7 +13,7 @@ fi
 image=$1
 version=3.0-SNAPSHOT
 
-echo "recreating tags for calimeroproject/$image..."
+echo "recreating tags for calimeroproject/$image:{latest,$version}..."
 
 docker manifest rm calimeroproject/$image:$version
 docker manifest create \
@@ -21,7 +21,7 @@ docker manifest create \
     --amend calimeroproject/$image:$version-amd64 \
     --amend calimeroproject/$image:$version-arm64 \
     --amend calimeroproject/$image:$version-armv7
-    
+
 docker manifest push calimeroproject/$image:$version
 
 

@@ -5,7 +5,7 @@ RUN ./gradlew clean --stacktrace
 
 
 
-FROM calimeroproject/openjdk-cl-alpine:21 AS BUILDER
+FROM calimeroproject/openjdk-cl-alpine:21 AS builder
 COPY --from=gradle-cache /root/.gradle /root/.gradle
 
 ENV libname=calimero-server
@@ -51,16 +51,14 @@ RUN apk add build-base cmake libusb-dev \
 
 # second stage
 
-#FROM bellsoft/liberica-openjdk-alpine-musl:latest
-FROM calimeroproject/openjdk-base-alpine:25-amd64
+FROM calimeroproject/openjdk-base-alpine:25
+LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
 ARG libversion
 
-LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
-
 # copy only the artifacts we need from the first stage and discard the rest
-COPY --from=BUILDER /usr/app/calimero-server-${libversion} /usr/app/calimero-server
-COPY --from=BUILDER /serial-native/native-lib/build/lib/main/release/stripped/libserialcom.so /usr/lib/
+COPY --from=builder /usr/app/calimero-server-${libversion} /usr/app/calimero-server
+COPY --from=builder /serial-native/native-lib/build/lib/main/release/stripped/libserialcom.so /usr/lib/
 
 RUN apk add --no-cache libusb
 #  && ln -s /sys/bus /dev/bus
