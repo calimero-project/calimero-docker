@@ -27,11 +27,17 @@ RUN apk add --no-cache git tar linux-headers build-base \
   && cd ../serial-native && ./gradlew build
 
 # alpine shell has no support for brace expansion
-RUN cd /usr/app/${libname}-${libversion}/lib && \
-    rm -f libusb4java-*-win32-*.jar libusb4java-*-aarch64*.jar libusb4java-*-darwin-*.jar libusb4java-*-arm.jar libusb4java-*-x86.jar \
-       calimero-rxtx-*.jar nrjavaserial-*.jar \
-       commons-net-*.jar \
-       slf4j-*.jar
+RUN cd /usr/app/${libname}-${libversion}/lib \
+  && if [ "$arch" = "x86-64" ]; then \
+       rm -f libusb4java-*-x86.jar libusb4java-*-aarch64*.jar libusb4java-*-arm.jar; \
+     elif [ "$arch" = "aarch64" ]; then \
+       rm -f libusb4java-*-x86*.jar libusb4java-*-arm.jar; \
+     elif [ "$arch" = "arm" ]; then \
+       rm -f libusb4java-*-x86*.jar libusb4java-*-aarch64*.jar; \
+     else \
+       echo "Unsupported architecture $arch"; exit 1; \
+     fi \
+  && rm -f libusb4java-*-win*.jar libusb4java-*-darwin-*.jar calimero-rxtx-*.jar nrjavaserial-*.jar commons-net-*.jar slf4j-*.jar
 
 # build libusb4java for musl
 ENV usbver=1.3.0
