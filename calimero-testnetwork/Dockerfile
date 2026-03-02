@@ -22,7 +22,8 @@ COPY ./repos/calimero-server ./calimero-server
 COPY ./repos/${libname} ./${libname}
 
 
-RUN cd ${libname} \
+RUN apk add git \
+  && cd ${libname} \
   && ./gradlew build -x javadoc \
   && mkdir /usr/app \
   && tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/ \
