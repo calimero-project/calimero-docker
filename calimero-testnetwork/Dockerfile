@@ -31,7 +31,7 @@ RUN cd ${libname} \
 
 # second stage
 
-FROM calimeroproject/openjdk-base-alpine:17
+FROM calimeroproject/openjdk-base-alpine:25
 
 ARG libname
 ARG libversion
