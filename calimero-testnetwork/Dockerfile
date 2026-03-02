@@ -3,7 +3,7 @@ ARG libversion
 
 
 FROM calimeroproject/openjdk-cl-alpine:21 AS gradle-cache
-COPY ./repos/calimero-core/build.gradle ./repos/calimero-core/gradlew /
+COPY ./repos/calimero-core/build.gradle.kts ./repos/calimero-core/gradlew /
 COPY ./repos/calimero-core/gradle/ gradle
 RUN ./gradlew clean --stacktrace
 
