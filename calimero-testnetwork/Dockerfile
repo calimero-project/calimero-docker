@@ -2,14 +2,14 @@ ARG libname=calimero-testnetwork
 ARG libversion
 
 
-FROM calimeroproject/openjdk-cl-alpine:17 AS gradle-cache
+FROM calimeroproject/openjdk-cl-alpine:21 AS gradle-cache
 COPY ./repos/calimero-core/build.gradle ./repos/calimero-core/gradlew /
 COPY ./repos/calimero-core/gradle/ gradle
 RUN ./gradlew clean --stacktrace
 
 
 
-FROM calimeroproject/openjdk-cl-alpine:17 AS BUILDER
+FROM calimeroproject/openjdk-cl-alpine:21 AS BUILDER
 COPY --from=gradle-cache /root/.gradle /root/.gradle
 
 ARG libname
@@ -22,7 +22,7 @@ COPY ./repos/calimero-server ./calimero-server
 COPY ./repos/${libname} ./${libname}
 
 
-RUN cd ${libname} \ 
+RUN cd ${libname} \
   && ./gradlew build -x javadoc \
   && mkdir /usr/app \
   && tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/ \
