@@ -39,9 +39,17 @@ docker $cmd . -f calimero-tools/Dockerfile --build-arg libversion="$version" --b
        -t calimeroproject/knxtools -t calimeroproject/knxtools:"$version" \
        -t calimeroproject/knxtools:latest-$arch_tag -t calimeroproject/knxtools:"$version"-$arch_tag $2
 echo
+echo "Verify knxtools image..."
+docker run -it --rm calimeroproject/knxtools:$version-$arch_tag
+echo
 echo
 echo "Building knxserver $version for platform $arch..."
 echo
 docker $cmd . -f calimero-server/Dockerfile --build-arg libversion="$version" --build-arg arch=$build_arch \
        -t calimeroproject/knxserver -t calimeroproject/knxserver:"$version" \
        -t calimeroproject/knxserver:latest-$arch_tag -t calimeroproject/knxserver:"$version"-$arch_tag $2
+echo
+echo "Verify knxserver image..."
+docker run -it --rm calimeroproject/knxserver:$version-$arch_tag --version
+echo
+
