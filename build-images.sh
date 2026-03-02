@@ -25,7 +25,7 @@ else
 fi
 
 rsync -av --exclude=.DS_Store --exclude=.gradle/ --exclude=.settings/ --exclude=.idea/ --exclude=bin/ --exclude=test/ --exclude=target/ --exclude=build/ --exclude=out/ \
-    ../calimero-core ../calimero-tools ../serial-native ../calimero-device ../calimero-server ../calimero-usb ./repos/
+    ../calimero-core ../calimero-tools ../serial-native ../calimero-device ../calimero-server ../calimero-testnetwork ../calimero-usb ./repos/
 
 # get the Calimero version we will build from the Gradle build setup
 version=$(cd repos/calimero-core && ./gradlew properties -q | sed -n 's/^version: //p')
@@ -52,4 +52,13 @@ echo
 echo "Verify knxserver image..."
 docker run -it --rm calimeroproject/knxserver:$version-$arch_tag --version
 echo
-
+echo
+echo "Building testnetwork $version for platform $arch..."
+echo
+docker $cmd . -f calimero-testnetwork/Dockerfile --build-arg libversion=$version --build-arg arch=$build_arch \
+    -t calimeroproject/knxtestnetwork -t calimeroproject/knxtestnetwork:$version \
+    -t calimeroproject/knxtestnetwork:latest-$arch_tag -t calimeroproject/knxtestnetwork:$version-$arch_tag $2
+echo
+echo "Verify testnetwork image..."
+docker run -it --rm calimeroproject/knxtestnetwork:$version-$arch_tag --version
+echo
