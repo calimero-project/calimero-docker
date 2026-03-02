@@ -9,7 +9,7 @@ RUN ./gradlew clean --stacktrace
 
 
 
-FROM calimeroproject/openjdk-cl-alpine:21 AS BUILDER
+FROM calimeroproject/openjdk-cl-alpine:21 AS builder
 COPY --from=gradle-cache /root/.gradle /root/.gradle
 
 ARG libname
@@ -39,7 +39,7 @@ ARG libversion
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
 # copy only the artifacts we need from the first stage and discard the rest
-COPY --from=BUILDER /usr/app /usr/app/
+COPY --from=builder /usr/app /usr/app/
 COPY $libname\/server-config.xml /usr/app/
 COPY $libname\/keyfile /usr/app/
 
