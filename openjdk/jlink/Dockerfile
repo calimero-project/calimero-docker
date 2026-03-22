@@ -9,15 +9,16 @@ ARG MODULES
 ARG JVM_DIR
 ARG JDK_ROOT
 ARG TMP_ROOT=/tmp/jdk-${jdkver}
+ARG ARCH
 ARG VM
 
-COPY jdk${jdkver}u/build/linux-x86_64-$VM-release/images/jdk $TMP_ROOT
-
-ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75.0 -XX:+UseShenandoahGC"
+COPY jdk${jdkver}u/build/linux-$ARCH-$VM-release/images/jdk $TMP_ROOT
 
 RUN  apk --no-cache add binutils \
   && if [ "$VM" = "custom" ] && [ "$jdkver" -le 17 ]; then libJvmDir=server; else libJvmDir=$VM; fi \
   && ln -s $libJvmDir/libjvm.so $TMP_ROOT/lib/libjvm.so \
+  && if [ "$ARCH" = "arm" ]; then GC_OPTS=""; else GC_OPTS="-J-XX:+UseShenandoahGC"; fi \
+  && if [ "$ARCH" = "arm" ]; then RUNTIME_GC=""; else RUNTIME_GC="--add-options -XX:+UseShenandoahGC"; fi \
   &&    case $MODULES in                     \
             all)                                           \
                 MODS=$( ls ${TMP_ROOT}/jmods/          \
@@ -25,26 +26,29 @@ RUN  apk --no-cache add binutils \
                       | tr '\n' ', '                        \
                       | sed "s/,$//")                       \
                       && echo $MODS \
-  &&            ${TMP_ROOT}/bin/jlink                  \
+  &&            ${TMP_ROOT}/bin/jlink \
+                    -J-Xms256m -J-Xmx1812m \
+                    $GC_OPTS \
+                    $RUNTIME_GC \
                     --add-modules ${MODS}                   \
                     --compress=zip-9                            \
                     --no-man-pages                          \
                     --module-path ${TMP_ROOT}/jmods    \
 #                    --vm=$VM                     \
-                    --add-options -XX:+UseShenandoahGC \
                     --release-info ${TMP_ROOT}/release \
                     --output "${JDK_ROOT}"             \
                 ;;                         \
             *) \
                 MODS=$MODULES                            \
-  &&            ${TMP_ROOT}/bin/jlink                  \
+  &&            ${TMP_ROOT}/bin/jlink \
+                    $GC_OPTS \
+                    $RUNTIME_GC \
                     --add-modules ${MODS}                 \
                     --compress=zip-9                            \
                     --no-header-files                       \
                     --no-man-pages --strip-debug            \
                     --module-path ${TMP_ROOT}/jmods    \
 #                   --vm=$VM                             \
-                    --add-options -XX:+UseShenandoahGC \
                     --release-info ${TMP_ROOT}/release \
                     --output "${JDK_ROOT}"             \
                 ;;                         \
