@@ -51,7 +51,7 @@ RUN apk add build-base cmake libusb-dev \
 
 # second stage
 
-FROM calimeroproject/openjdk-base-alpine:25
+FROM calimeroproject/openjdk-base-alpine:26
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
 ARG libversion
