@@ -1,4 +1,5 @@
-ARG bootJdk
+# syntax=docker/dockerfile:1
+ARG bootJdk=0
 
 FROM calimeroproject/openjdk-cl-alpine:$bootJdk
 
@@ -7,10 +8,10 @@ ARG targetJdk
 ARG skipCloneJdk
 ARG repo=https://github.com/openjdk/jdk"${targetJdk}"u.git
 # OpenJDK main-line
-#ARG repo https://github.com/openjdk/jdk.git
+#ARG repo=https://github.com/openjdk/jdk.git
 
 # required if we run configure in a container
-ENV bootJdk $bootJdk
+ENV bootJdk=$bootJdk
 
 RUN apk add git bash build-base autoconf zip libx11-dev libxrandr-dev libxtst-dev libxt-dev \
     cups-dev cups-libs cups-client cups-filters fontconfig-dev alsa-lib-dev linux-headers \
@@ -27,7 +28,3 @@ WORKDIR /jdk
 RUN git config --global --add safe.directory /jdk
 
 COPY --chmod=755 jdk-configure-make-targets.sh /run-configure.sh
-
-#RUN make images CONF=
-
-#ENTRYPOINT ["/jdk/build/linux-x86_64-custom-release/images/jdk/bin/java"]
