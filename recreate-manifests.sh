@@ -6,7 +6,7 @@
 #
 
 if [ "$#" -ne 2 ]; then
-    echo "Script expects parameters Calimero image {tools|server} and version"
+    echo "Script expects parameters Calimero image {tools|server|testnetwork} and version"
     exit 1
 fi
 
