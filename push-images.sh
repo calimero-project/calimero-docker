@@ -1,18 +1,15 @@
 #!/bin/sh
-# Run this to upload a new image to docker hub
+# Run this to upload all images built by build-images.sh (server, tools, testnetwork) to docker hub
 
-if [ "$#" -ne 3 ]; then
-    echo "Script expects 3 parameters: Calimero image {tools, server, testnetwork}, arch {amd64, arm64, armv7} and version"
+if [ "$#" -ne 2 ]; then
+    echo "Script expects 2 parameters: arch {amd64, arm64, armv7} and version"
     exit 1
 fi
 
-image=knx$1
-arch=$2
-version=$3
+arch=$1
+version=$2
 
-echo pushing calimeroproject/$image:$version-$arch...
-docker push calimeroproject/$image:$version-$arch
-
-echo
-echo pushing calimeroproject/$image:latest-$arch...
-docker push calimeroproject/$image:latest-$arch
+for image in server tools testnetwork; do
+  ./push-image.sh "$image" "$arch" "$version"
+  echo
+done
