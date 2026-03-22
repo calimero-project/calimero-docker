@@ -17,4 +17,7 @@ export skipCloneJdk=true
 ./configure-target-jdk.sh $targetJdk $arch
 
 echo "Mounting volume with JDK from $(pwd)/jdk${targetJdk}u"
-docker run -it -v $(pwd)/jdk${targetJdk}u:/jdk openjdk$targetJdk-builder:$arch
+docker run -it -v $(pwd)/jdk${targetJdk}u:/jdk \
+               -v $(pwd)/jdk-configure-make-targets.sh:/jdk/run-configure.sh \
+               openjdk$targetJdk-builder:$arch \
+               bash -c "./run-configure.sh && exec bash"
