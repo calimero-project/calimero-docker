@@ -1,13 +1,30 @@
 #!/bin/sh
 
+if [ "$#" -ne 2 ]; then
+    echo "Script expects parameters <target-jdk-version> <arch>={armv7 arm64 amd64}"
+    exit 1
+fi
+
 targetJdk=$1
-bootJdk="$(($targetJdk - 1))"
-arch=amd64
-# leave commented out to clone jdk in docker image
-#skipCloneJdk=true
+bootJdk="$((targetJdk - 1))"
 
-echo "Using boot JDK $bootJdk, configuring target JDK $targetJdk"
+arch=$2
+# match the corresponding buildx platform, and the architecture id used in the jdk build directory
+if [ $arch = "armv7" ]; then
+  arch_alt=arm/v7
+elif [ $arch = "arm64" ]; then
+  arch_alt=arm64
+elif [ $arch = "amd64" ]; then
+  arch_alt=amd64
+else
+  echo "Unsupported architecture $arch"
+  exit 1
+fi
 
-docker buildx build . -f compile/Dockerfile --platform linux/$arch \
+# platforms: linux/arm/v7, linux/arm64, linux/amd64
+platform=linux/$arch_alt
+
+echo "Using boot JDK $bootJdk, configuring target JDK $targetJdk for $platform"
+docker buildx build . -f compile/Dockerfile --platform $platform \
     --build-arg bootJdk=$bootJdk --build-arg targetJdk=$targetJdk --build-arg skipCloneJdk=$skipCloneJdk \
-    -t openjdk$targetJdk-builder $2 $3
+    -t openjdk$targetJdk-builder:$arch $3 $4
