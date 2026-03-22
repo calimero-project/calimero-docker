@@ -33,9 +33,12 @@ RUN  apk --no-cache add binutils \
                     --add-modules ${MODS}                   \
                     --compress=zip-9                            \
                     --no-man-pages                          \
+                    --strip-debug                         \
+                    --strip-java-debug-attributes              \
                     --module-path ${TMP_ROOT}/jmods    \
 #                    --vm=$VM                     \
                     --release-info ${TMP_ROOT}/release \
+                    --dedup-legal-notices=error-if-not-same-content            \
                     --output "${JDK_ROOT}"             \
                 ;;                         \
             *) \
@@ -46,14 +49,17 @@ RUN  apk --no-cache add binutils \
                     --add-modules ${MODS}                 \
                     --compress=zip-9                            \
                     --no-header-files                       \
-                    --no-man-pages --strip-debug            \
+                    --no-man-pages                   \
+                    --strip-debug            \
+                    --strip-java-debug-attributes               \
                     --module-path ${TMP_ROOT}/jmods    \
 #                   --vm=$VM                             \
                     --release-info ${TMP_ROOT}/release \
+                    --dedup-legal-notices=error-if-not-same-content              \
                     --output "${JDK_ROOT}"             \
                 ;;                         \
             esac                                      \
-  &&    ln -s $libJvmDir/libjvm.so $JDK_ROOT/lib/libjvm.so             
+  &&    ln -s $libJvmDir/libjvm.so $JDK_ROOT/lib/libjvm.so
 
 
 
