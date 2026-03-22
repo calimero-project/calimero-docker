@@ -6,6 +6,7 @@
 		<knxAddress type="individual">1.1.0</knxAddress>
 <!--		<knxSubnet type="emulate" medium="tp1">TestNetwork</knxSubnet>-->
 		<knxSubnet type="usb" medium="tp1"></knxSubnet>
+<!-- 		<knxSubnet type="tpuart">/dev/ttyS0</knxSubnet> -->
 		<disruptionBuffer expirationTimeout="30" udpPort="5555-5559" />
 		<routing>224.0.23.12</routing>
 		<groupAddressFilter>
