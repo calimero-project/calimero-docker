@@ -32,6 +32,11 @@ RUN apk add git bash build-base autoconf zip libx11-dev libxrandr-dev libxtst-de
 
 WORKDIR /jdk
 
+# when starting a container and linking in the jdk directory, we might
+# get the following git warning: "fatal: detected dubious ownership in repository at '/jdk'"
+# ignore that crap
+RUN git config --global --add safe.directory /jdk
+
 #RUN make images CONF=
 
 #ENTRYPOINT ["/jdk/build/linux-x86_64-custom-release/images/jdk/bin/java"]
