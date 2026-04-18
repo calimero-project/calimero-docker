@@ -21,7 +21,8 @@ The Dockerfiles use a custom-built JDK and (minimal) Java runtime for building a
 tools/server/testnetwork, respectively.
 A JDK/runtime image build requires several minutes to build (or really long if using Docker `buildx`):
 * Run [setup-external-jdk.sh](openjdk/setup-external-jdk.sh).
-* In the resulting Docker container, run `make images CONF=`.
+* In the resulting Docker container, run `make images CONF=`. If the Shenandoah GC is used, `export 
+JAVA_TOOL_OPTIONS="-XX:+UseShenandoahGC"` if a build error occurs.
 * Run [build-java-image.sh](openjdk/build-java-image.sh) to create the final the Docker image
 
 Pre-built Docker images are available on [Docker Hub](https://hub.docker.com/u/calimeroproject).
