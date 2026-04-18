@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$#" -ne 2 ]; then
-    echo "Script expects parameters <target-jdk-version> <arch>={armv7 arm64 amd64}"
+    echo "Script expects parameters <target-jdk-version> <arch>={armv7 aarch64 amd64}"
     exit 1
 fi
 
@@ -12,7 +12,7 @@ arch=$2
 # match the corresponding buildx platform, and the architecture id used in the jdk build directory
 if [ $arch = "armv7" ]; then
   arch_alt=arm/v7
-elif [ $arch = "arm64" ]; then
+elif [ $arch = "aarch64" ]; then
   arch_alt=arm64
 elif [ $arch = "amd64" ]; then
   arch_alt=amd64

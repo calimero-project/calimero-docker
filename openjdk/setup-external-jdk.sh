@@ -2,7 +2,7 @@
 set -e
 
 if [ "$#" -ne 2 ]; then
-    echo "Script expects parameters <target-jdk-version> <arch>={armv7 arm64 amd64}"
+    echo "Script expects parameters <target-jdk-version> <arch>={armv7 aarch64 amd64}"
     exit 1
 fi
 
