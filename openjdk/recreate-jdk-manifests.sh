@@ -7,6 +7,10 @@
 
 if [ "$#" -ne 3 ]; then
     echo "Script expects parameters <jdk-variant> <modules> <version>"
+    echo "Typical combinations:
+    - client all <version>
+    - custom base <version>
+    - custom xml <version>"
     exit 1
 fi
 
