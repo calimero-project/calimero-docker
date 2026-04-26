@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$#" -ne 1 ]; then
+if [ "$#" -lt 1 ]; then
     echo "Script expects parameters <arch>={armv7, aarch64, amd64}"
     exit 1
 fi
