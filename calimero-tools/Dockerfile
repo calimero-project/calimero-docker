@@ -57,12 +57,18 @@ LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
 ARG libversion
 
+ARG user=app
+RUN addgroup -S $user \
+ && adduser -S $user -G $user \
+ && addgroup $user dialout
+
 # copy only the artifacts we need from the first stage and discard the rest
-COPY --from=builder /usr/app/calimero-tools-${libversion} /usr/app/calimero-tools
-COPY --from=builder /serial-native/native-lib/build/lib/main/release/stripped/libserialcom.so /usr/lib/
+COPY --chown=app:app --from=builder /usr/app/calimero-tools-${libversion} /usr/app/calimero-tools
+COPY --chown=app:app --from=builder /serial-native/native-lib/build/lib/main/release/stripped/libserialcom.so /usr/lib/
 
 RUN apk add --no-cache libusb
 #  && ln -s /sys/bus /dev/bus
 
+USER $user
 WORKDIR /usr/app
 ENTRYPOINT ["calimero-tools/bin/calimero-tools"]

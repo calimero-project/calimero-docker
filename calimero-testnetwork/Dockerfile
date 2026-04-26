@@ -39,12 +39,16 @@ ARG libversion
 
 LABEL maintainer="Calimero Project <calimero.project@gmail.com>"
 
+ARG user=app
+RUN addgroup -S $user \
+ && adduser -S $user -G $user
+
 # copy only the artifacts we need from the first stage and discard the rest
-COPY --from=builder /usr/app /usr/app/
-COPY $libname\/server-config.xml /usr/app/
-COPY $libname\/keyfile /usr/app/
+COPY --chown=app:app --from=builder /usr/app /usr/app/
+COPY --chown=app:app $libname\/server-config.xml /usr/app/
+COPY --chown=app:app $libname\/keyfile /usr/app/
 
-EXPOSE 3671/udp 3671/tcp
-
+USER $user
 WORKDIR /usr/app
+EXPOSE 3671/udp 3671/tcp
 ENTRYPOINT ["./testnetwork"]
