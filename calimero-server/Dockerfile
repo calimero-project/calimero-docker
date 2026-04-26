@@ -24,7 +24,7 @@ RUN apk add --no-cache git tar linux-headers build-base \
   && ./gradlew build -x javadoc \
   && mkdir /usr/app \
   && tar -xvf ./build/distributions/${libname}-*.tar -C /usr/app/ \
-  && cd ../serial-native && ./gradlew build
+  && cd ../serial-native && ./gradlew build -PunixLockingModes=""
 
 # alpine shell has no support for brace expansion
 RUN cd /usr/app/${libname}-${libversion}/lib \
