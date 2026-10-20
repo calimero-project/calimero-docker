@@ -32,7 +32,7 @@ RUN apk add git \
 
 # second stage
 
-FROM calimeroproject/openjdk-base-alpine:26
+FROM calimeroproject/openjdk-base-alpine:27
 
 ARG libname
 ARG libversion
