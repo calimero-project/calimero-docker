@@ -2,7 +2,7 @@ ARG jdkver
 ARG JVM_DIR=/usr/lib/jvm
 ARG JDK_ROOT=${JVM_DIR}/jdk-${jdkver}
 
-FROM alpine:3.23 AS builder
+FROM alpine:3.24 AS builder
 
 ARG jdkver
 ARG MODULES
@@ -63,7 +63,7 @@ RUN  apk --no-cache add binutils \
 
 
 
-FROM alpine:3.23 AS base
+FROM alpine:3.24 AS base
 
 ARG JDK_ROOT
 
@@ -71,4 +71,3 @@ COPY --from=builder $JDK_ROOT/ $JDK_ROOT/
 
 ENV JAVA_HOME=${JDK_ROOT} \
     PATH=${JDK_ROOT}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
