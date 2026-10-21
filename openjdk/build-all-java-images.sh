@@ -10,5 +10,5 @@ javaver=$1
 arch=$2
 
 ./build-java-image.sh $javaver custom java.base $arch
-./build-java-image.sh $javaver custom java.xml $arch
+#./build-java-image.sh $javaver custom java.xml $arch
 ./build-java-image.sh $javaver client all $arch
