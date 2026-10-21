@@ -1,15 +1,36 @@
 #!/bin/sh
 # Run this to upload all flavors of a new openjdk image (base, xml, cl) to docker hub
 
-if [ "$#" -ne 2 ]; then
-    echo "Script expects parameters <version> <arch>={armv7 aarch64 amd64}"
+arch_list="armv7, aarch64, amd64"
+
+if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+    printf 'Script expects parameters <version> [<arch>={%s}]\n' "$arch_list"
     exit 1
 fi
 
 version=$1
 arch=$2
 
-for flavor in base xml cl; do
-  ./push-image.sh "$flavor" "$version" "$arch"
-  echo
+if [ "$#" -eq 2 ]; then
+    arches="$2"
+else
+    printf 'Upload all architectures (%s)? [y/N] ' "$arch_list"
+    read -r confirm
+
+    case "$confirm" in
+        Y|y|yes)
+            arches=$(echo "$arch_list" | tr ',' ' ')
+            ;;
+        *)
+            echo "Upload cancelled"
+            exit 0
+            ;;
+    esac
+fi
+
+for arch in $arches; do
+    for flavor in base xml cl; do
+        ./push-image.sh "$flavor" "$version" "$arch"
+        echo
+    done
 done
