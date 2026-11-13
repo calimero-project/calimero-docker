@@ -6,38 +6,11 @@ Dockerfiles for Calimero
 [testnetwork](https://github.com/calimero-project/calimero-testnetwork). 
 Built Docker images are available on [Docker Hub](https://hub.docker.com/u/calimeroproject).
 
-### Building images
-
-The _build-images.sh_ script assumes that the repository layout of required Calimero sources 
-follows the GitHub layout, i.e., the required repositories are sibling directories of _calimero-docker_.
-
-For building Calimero Docker images, use
-
-	./build-images.sh {armv7, aarch64, amd64}
-
-#### JDK and Java runtime
-
-The Dockerfiles use a custom-built JDK and (minimal) Java runtime for building and running the Calimero 
-tools/server/testnetwork, respectively.
-A JDK/runtime image build requires several minutes to build (or really long if using Docker `buildx`):
-* Run [setup-external-jdk.sh](openjdk/setup-external-jdk.sh).
-* In the resulting Docker container, run `make images CONF=`. If the Shenandoah GC is used, `export 
-JAVA_TOOL_OPTIONS="-XX:+UseShenandoahGC"` if a build error occurs.
-* Run [build-java-image.sh](openjdk/build-java-image.sh) to create the final the Docker image
-
-Pre-built Docker images are available on [Docker Hub](https://hub.docker.com/u/calimeroproject).
-
-Alternatively, replace the JDK/runtime in the calimero-tools/server Dockerfile with an image of your choice.
-
-#### Currently used custom JDK/runtime configurations
-
-* Architectures: x86-64, ARMv7, AArch64
-* C1 compiler
-* GC: Shenandoah GC (on ARMv7 Serial GC, Shenandoah is not supported)
-* Optimize for size
-* Modules: _java.base_ (+ _java.xml_ for Calimero tools)
-
-### Running containers
+| Image | Docker Command |
+|-------|----------------|
+| **KNX Tools** | `docker run --rm -it calimeroproject/knxtools` |
+| **KNX Server** | `docker run --rm -it -v /my/server-config.xml:/usr/app/server-config.xml calimeroproject/knxserver server-config.xml` |
+| **KNX Test Network** | `docker run --rm -it calimeroproject/knxtestnetwork` |
 
 #### Docker options
 
@@ -59,3 +32,28 @@ Alternatively, replace the JDK/runtime in the calimero-tools/server Dockerfile w
 * `-v`, `-vv`, `-vvv`: log at level info (default), debug, or trace, respectively. This option has to be passed as first argument.
 * `--no-stdin` (KNX Server specific): do not use standard input, to run the server as daemon or without a terminal. 
 This option has to be passed before the server configuration.
+
+### Building images
+
+The _build-images.sh_ script assumes that the repository layout of required Calimero sources
+follows the GitHub layout, i.e., the required repositories are sibling directories of _calimero-docker_.
+
+	./build-images.sh {armv7, aarch64, amd64}
+
+### JDK and Java runtime
+
+The Dockerfiles use a custom-built JDK and a minimal Java runtime, both based on Alpine Linux, for building and 
+running the Calimero tools, server, and testnetwork.
+
+#### Currently used custom JDK/runtime configurations
+
+* Architectures: x86-64, ARMv7, AArch64
+* C1 compiler
+* GC: Shenandoah GC (on ARMv7 Serial GC, Shenandoah is not supported)
+* Optimize for size
+* Modules: _java.base_
+
+#### Building the OpenJDK
+
+Pre-built Docker images are available on [Docker Hub](https://hub.docker.com/u/calimeroproject). See the
+[README](openjdk/README.md) for building instructions.
