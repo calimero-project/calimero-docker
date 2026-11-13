@@ -6,17 +6,17 @@
 #
 
 if [ "$#" -ne 3 ]; then
-    echo "Script expects parameters <jdk-variant> <modules> <version>"
+    echo "Script expects parameters <version> <jdk-variant> <modules>"
     echo "Typical combinations:
-    - client all <version>
-    - custom base <version>
-    - custom xml <version>"
+    - <version> client all
+    - <version> custom base
+    - <version> custom xml"
     exit 1
 fi
 
-variant=$1
-modules=$2
-version=$3
+version=$1
+variant=$2
+modules=$3
 
 if [ $variant = "client" ]; then
   variant_id="-cl"
