@@ -2,7 +2,7 @@
 <!-- Calimero KNXnet/IP server settings -->
 <knxServer name="docker-server" friendlyName="Calimero KNX Server (Docker)">
 	<discovery listenNetIf="all" outgoingNetIf="all" />
-	<serviceContainer activate="true" routing="true" networkMonitoring="true" listenNetIf="any" udpPort="3671">
+	<serviceContainer activate="true" routing="true" networkMonitoring="true" netif="any" udpPort="3671">
 		<knxAddress type="individual">1.1.0</knxAddress>
 <!--		<knxSubnet type="emulate" medium="tp1">TestNetwork</knxSubnet>-->
 		<knxSubnet type="usb" medium="tp1"></knxSubnet>
