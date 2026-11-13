@@ -2,14 +2,14 @@
 # Run this to upload all images built by build-images.sh (server, tools, testnetwork) to docker hub
 
 if [ "$#" -ne 2 ]; then
-    echo "Script expects 2 parameters: arch {amd64, arm64, armv7} and version"
+    echo "Script expects 2 parameters: version and arch {amd64, arm64, armv7}"
     exit 1
 fi
 
-arch=$1
-version=$2
+version=$1
+arch=$2
 
 for image in server tools testnetwork; do
-  ./push-image.sh "$image" "$arch" "$version"
+  ./push-image.sh "$image" "$version" "$arch"
   echo
 done
